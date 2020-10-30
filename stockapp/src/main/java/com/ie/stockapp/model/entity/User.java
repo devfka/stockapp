@@ -20,8 +20,8 @@ public class User extends BaseEntity {
     @Column(name = "userId", length = 60)
     private Long userId;
 
-    @Column(name = "userName", length = 100, nullable = false)
-    private String userName;
+    @Column(name = "username", length = 100, nullable = false)
+    private String username;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserStock> userStocks;

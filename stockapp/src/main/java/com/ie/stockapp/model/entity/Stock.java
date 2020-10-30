@@ -26,11 +26,11 @@ public class Stock extends BaseEntity {
     @Column(name = "currentPrice")
     private BigDecimal currentPrice;
 
-    @Column(name = "currentPrice")
-    private BigDecimal highestPriceIn5Min;
+    @Column(name = "highestPriceInLast5Min")
+    private BigDecimal highestPriceInLast5Min;
 
-    @Column(name = "currentPrice")
-    private BigDecimal lowestPriceIn5Min;
+    @Column(name = "lowestPriceInLast5Min")
+    private BigDecimal lowestPriceInLast5Min;
 
     @Column(name = "volume")
     private Long volume;
