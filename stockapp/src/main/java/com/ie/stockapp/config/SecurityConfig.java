@@ -1,6 +1,5 @@
-package com.randomfood.food.config;
+package com.ie.stockapp.config;
 
-import com.randomfood.food.utils.Constants;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,8 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @Configuration
@@ -36,9 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.inMemoryAuthentication()
-                .withUser(Constants.USER).password(Constants.USER_PASS).roles(Constants.USER_ROLE)
+                .withUser("user1").password("{noop}1234").roles("role1")
                 .and()
-                .withUser(Constants.ADMIN).password(Constants.ADMIN_PASS).roles(Constants.ADMIN_ROLE);
+                .withUser("user2").password("{noop}1234").roles("role1");
 
     }
 

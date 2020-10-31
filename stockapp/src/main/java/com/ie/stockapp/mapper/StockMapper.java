@@ -1,26 +1,32 @@
-package com.randomfood.food.mapper;
+package com.ie.stockapp.mapper;
 
-import com.randomfood.food.modal.Recipe;
-import com.randomfood.food.types.RecipeDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import com.ie.stockapp.model.dto.StockDTO;
+import com.ie.stockapp.model.entity.Stock;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Service
-public class RecipeMapper {
-    private final Logger log = LoggerFactory.getLogger(RecipeMapper.class);
+@Component
+@Slf4j
+public class StockMapper {
 
-    public RecipeDTO recipeToRecipeDTO(Recipe recipe) {
-        return new RecipeDTO(recipe);
+    public static StockDTO stockToStockDTO(Stock stock) {
+        return StockDTO.builder()
+                .stockId(stock.getStockId())
+                .stockName(stock.getStockName())
+                .currentPrice(stock.getCurrentPrice())
+                .highestPriceInLast5Min(stock.getHighestPriceInLast5Min())
+                .lowestPriceInLast5Min(stock.getLowestPriceInLast5Min())
+                .volume(stock.getVolume())
+                .build();
     }
 
-    public List<RecipeDTO> recipesToRecipeDTOs(List<Recipe> recipes) {
-        return recipes.stream().filter(Objects::nonNull)
-                .map(this::recipeToRecipeDTO)
+    public static List<StockDTO> stocksToStockDTOs(List<Stock> stocks) {
+        return stocks.stream().filter(Objects::nonNull)
+                .map(StockMapper::stockToStockDTO)
                 .collect(Collectors.toList());
     }
 

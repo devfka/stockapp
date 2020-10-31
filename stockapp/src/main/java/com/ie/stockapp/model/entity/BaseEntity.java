@@ -1,4 +1,4 @@
-package com.ie.stockapp.model;
+package com.ie.stockapp.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,15 +14,15 @@ import java.time.LocalDateTime;
 @ToString
 public abstract class BaseEntity {
 
-    @Column(name="createDate")
+    @Column(name = "CREATEDATE")
     private LocalDateTime createDate;
 
-    @Column(name="createdBy")
+    @Column(name = "CREATEDBY")
     private String createdBy;
 
-    @Column(name="lastChangeDate")
+    @Column(name = "LASTCHANGEDATE")
     private LocalDateTime lastChangeDate;
 
-    @Column(name="lastChangedBy")
-    private Timestamp lastChangedBy;
+    @Column(name = "LASTCHANGEDBY")
+    private String lastChangedBy;
 }

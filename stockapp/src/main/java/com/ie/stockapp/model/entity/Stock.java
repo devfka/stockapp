@@ -1,4 +1,4 @@
-package com.ie.stockapp.model;
+package com.ie.stockapp.model.entity;
 
 import lombok.*;
 
@@ -12,27 +12,28 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString
-@Table(name= "stock")
-public class Stock extends BaseEntity {
+@Table(name = "Stock")
+@Entity
+public class Stock {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "stockId", length = 60)
+    @Column(name = "STOCKID", length = 60)
     private Long stockId;
 
-    @Column(name = "stockName", length = 100, nullable = false)
+    @Column(name = "STOCKNAME", length = 100, nullable = false)
     private String stockName;
 
-    @Column(name = "currentPrice")
+    @Column(name = "CURRENTPRICE")
     private BigDecimal currentPrice;
 
-    @Column(name = "highestPriceInLast5Min")
+    @Column(name = "HIGHESTPRICEINLAST5MIN")
     private BigDecimal highestPriceInLast5Min;
 
-    @Column(name = "lowestPriceInLast5Min")
+    @Column(name = "LOWESTPRICEINLAST5MIN")
     private BigDecimal lowestPriceInLast5Min;
 
-    @Column(name = "volume")
+    @Column(name = "VOLUME")
     private Long volume;
 
     @OneToMany(mappedBy = "stock", fetch = FetchType.EAGER)

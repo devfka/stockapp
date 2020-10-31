@@ -1,18 +1,10 @@
-package com.randomfood.food.repository;
+package com.ie.stockapp.repository;
 
-import com.randomfood.food.modal.Ingredient;
-import com.randomfood.food.modal.Recipe;
+import com.ie.stockapp.model.entity.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+@Repository
+public interface StockRepository extends JpaRepository<Stock, Long> {
 
-
-/**
- * Database Access Object for recipe table.
- * <p/>
- */
-public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
-
-    Optional<Ingredient> findByIngredientId (Long ingredientId);
 }

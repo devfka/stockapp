@@ -1,4 +1,4 @@
-package com.ie.stockapp.model;
+package com.ie.stockapp.model.entity;
 
 import lombok.*;
 
@@ -10,26 +10,21 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @ToString
-@Table(name = "userstock")
+@Table(name = "USERSTOCK")
+@Entity
 public class UserStock extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userStockId")
+    @Column(name = "USERSTOCKID")
     private Long userStockId;
 
-    @Column(name = "userId")
-    private Long userId;
-
-    @Column(name = "stockId")
-    private Long stockId;
-
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "USERID")
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "stockId")
+    @JoinColumn(name = "STOCKID")
     private Stock stock;
 
 }

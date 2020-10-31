@@ -1,10 +1,9 @@
-package com.ie.stockapp.model;
+package com.ie.stockapp.model.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -12,15 +11,16 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @ToString
-@Table(name= "user")
+@Table(name = "User")
+@Entity
 public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userId", length = 60)
+    @Column(name = "USERID", length = 60)
     private Long userId;
 
-    @Column(name = "username", length = 100, nullable = false)
+    @Column(name = "USERNAME", length = 100, nullable = false)
     private String username;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
