@@ -27,5 +27,28 @@ CREATE TABLE UserStock (
     createDate DATE,
     createdBy varchar(255),
     lastChangeDate DATE,
-    lastChangedBy varchar(255)
+    lastChangedBy varchar(255),
+    activeIndicator varchar(1)
+--     activeIndicator varchar(1)
 );
+
+CREATE SEQUENCE userstock_seq
+  MINVALUE 1
+  MAXVALUE 999999999
+  START WITH 2
+  INCREMENT BY 1
+  CACHE 20;
+
+CREATE SEQUENCE user_seq
+  MINVALUE 1
+  MAXVALUE 999999999
+  START WITH 2
+  INCREMENT BY 1
+  CACHE 20;
+
+CREATE SEQUENCE stock_seq
+  MINVALUE 1
+  MAXVALUE 999999999
+  START WITH 3
+  INCREMENT BY 1
+  CACHE 20;

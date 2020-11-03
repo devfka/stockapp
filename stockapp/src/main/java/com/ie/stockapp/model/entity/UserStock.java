@@ -1,6 +1,7 @@
 package com.ie.stockapp.model.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -12,10 +13,12 @@ import javax.persistence.*;
 @ToString
 @Table(name = "USERSTOCK")
 @Entity
+@Where(clause = "activeIndicator = 'Y'")
 public class UserStock extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userstock_seq")
+    @SequenceGenerator(name = "userstock_seq", sequenceName = "userstock_seq", allocationSize = 1)
     @Column(name = "USERSTOCKID")
     private Long userStockId;
 
@@ -26,5 +29,8 @@ public class UserStock extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "STOCKID")
     private Stock stock;
+
+    @Column(name = "ACTIVEINDICATOR")
+    private String activeIndicator;
 
 }
