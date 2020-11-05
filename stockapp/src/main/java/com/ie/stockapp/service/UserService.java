@@ -19,5 +19,4 @@ public class UserService {
         return this.userRepository.findByUsername(username);
     }
 
-    // TODO: 10/30/2020 - exception handling
 }

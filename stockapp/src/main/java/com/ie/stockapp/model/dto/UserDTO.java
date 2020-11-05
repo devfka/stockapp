@@ -3,6 +3,7 @@ package com.ie.stockapp.model.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Builder
@@ -14,9 +15,10 @@ public class UserDTO {
 
     private Long userId;
 
+    @NotEmpty
     private String username;
 
     private List<StockDTO> stockDTOS;
 
-    // TODO: 10/30/2020 - add some validation to the fields
+
 }

@@ -41,6 +41,4 @@ public class UserMapper {
                 .collect(Collectors.toList());
     }
 
-    // TODO: 10/31/2020 : Model mapper mi kullansak ?
-
 }

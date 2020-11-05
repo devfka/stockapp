@@ -25,4 +25,5 @@ public abstract class BaseEntity {
 
     @Column(name = "LASTCHANGEDBY")
     private String lastChangedBy;
+
 }

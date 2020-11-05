@@ -29,5 +29,3 @@ public class User extends BaseEntity {
 
     //can keep all other user details here or another detail table e.g lastLoginDate etc..
 }
-
-// TODO: 10/30/2020 - password icin field ekle ve hash seklinde tut

@@ -4,6 +4,7 @@ import com.ie.stockapp.enums.ProcessType;
 import com.ie.stockapp.exception.ResourceNotFoundException;
 import com.ie.stockapp.mapper.StockMapper;
 import com.ie.stockapp.model.dto.StockDTO;
+import com.ie.stockapp.model.dto.StockSearchDTO;
 import com.ie.stockapp.service.StockService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -28,7 +32,7 @@ public class StockController {
     }
 
     @ApiOperation(value = "Gets All stocks available", response = List.class)
-    @GetMapping(value = "/stock", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/getAllStocks", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StockDTO>> getAllStocks() {
 
         List<StockDTO> stockDTOS = StockMapper.stocksToStockDTOs(this.stockService.getAllStocks());
@@ -38,22 +42,26 @@ public class StockController {
     }
 
     @ApiOperation(value = "Follow or Unfollow a stock", response = List.class)
-    @PostMapping(value = "/followUnFollowStock/{username}/{stockId}/{processType}")
-    public ResponseEntity<?> followUnFollowStock(@PathVariable("username") String username, @PathVariable("stockId") Long stockId,
-                                                 @PathVariable("processType") String processType) throws ResourceNotFoundException {
+    @PostMapping(value = "/followUnFollowStock/{stockname}/{processType}")
+    public ResponseEntity<?> followUnFollowStock(@PathVariable("stockname") String stockname,
+                                                 @PathVariable("processType") String processType, HttpServletRequest request) throws ResourceNotFoundException {
 
-        this.stockService.followUnFollowStock(username, stockId, ProcessType.valueOf(processType.toUpperCase()));
+        Principal principal = request.getUserPrincipal(); // get user name fron spring security
+
+        this.stockService.followUnFollowStock(principal.getName(), stockname, ProcessType.valueOf(processType.toUpperCase()));
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
-        // TODO: 11/3/2020 burada, illegal argument exception dondur. enum case senstive degil
     }
 
-    // TODO: 11/2/2020 - make validation of variables
-    // TODO: 11/3/2020 - user'r direk spring security'den cekebiliyor muyuz ? parametre gecmeyiz boyleikle ?
-    // TODO: 11/3/2020 - follow vs unfollow'u input dto haline cevir, path variable yerine
-    // TODO: 11/3/2020 - logger ekle
-    // TODO: 11/3/2020 follow ve unfollow endpoint parametresini degistirebilirsin stockid -> stockname
-    // TODO: 11/3/2020, user ayni stock'u takip ettiginde hata dondur!
+    @ApiOperation(value = "Search stocks ", response = List.class)
+    @GetMapping(value = "/searchStock/{stockname}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StockSearchDTO>> searchStock(@PathVariable("stockname") String stockname) throws IOException {
+
+        List<StockSearchDTO> stockSearchDTOList = this.stockService.searchStock(stockname);
+
+        return new ResponseEntity<>(stockSearchDTOList, HttpStatus.OK);
+
+    }
 
 }

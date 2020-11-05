@@ -3,6 +3,7 @@ package com.ie.stockapp.model.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
 @Builder
@@ -14,6 +15,7 @@ public class StockDTO {
 
     private Long stockId;
 
+    @NotEmpty
     private String stockName;
 
     private BigDecimal currentPrice;
@@ -24,5 +26,4 @@ public class StockDTO {
 
     private Long volume;
 
-    // TODO: 10/30/2020 - add some validation to the fields
 }

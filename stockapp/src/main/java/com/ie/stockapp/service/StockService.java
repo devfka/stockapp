@@ -3,16 +3,20 @@ package com.ie.stockapp.service;
 import com.ie.stockapp.enums.ActiveIndicator;
 import com.ie.stockapp.enums.ProcessType;
 import com.ie.stockapp.exception.ResourceNotFoundException;
+import com.ie.stockapp.model.dto.StockDTO;
+import com.ie.stockapp.model.dto.StockSearchDTO;
 import com.ie.stockapp.model.entity.Stock;
 import com.ie.stockapp.model.entity.User;
 import com.ie.stockapp.model.entity.UserStock;
 import com.ie.stockapp.repository.StockRepository;
 import com.ie.stockapp.repository.UserStockRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,17 +24,17 @@ import java.util.Optional;
 @Slf4j
 public class StockService {
 
+    @Autowired
     private StockRepository stockRepository;
 
+    @Autowired
     private UserStockRepository userStockRepository;
 
-    private UserService userService;
+    @Autowired
+    private DataStreamService dataStreamService;
 
-    public StockService(StockRepository stockRepository, UserStockRepository userStockRepository, UserService userService) {
-        this.stockRepository = stockRepository;
-        this.userStockRepository = userStockRepository;
-        this.userService = userService;
-    }
+    @Autowired
+    private UserService userService;
 
     public List<Stock> getAllStocks() {
         return this.stockRepository.findAll();
@@ -41,41 +45,41 @@ public class StockService {
     }
 
     @Transactional
-    public void followStock(String username, Long stockId) throws ResourceNotFoundException, DataIntegrityViolationException {
+    public void updateStock(StockDTO stockDTO) {
+        Stock stock = this.stockRepository.findByStockName(stockDTO.getStockName());
 
-        User user = userService.getUserByUserName(username);
-        Optional<Stock> stock = getStock(stockId);
-        UserStock userStock = null;
+        stock.setCurrentPrice(stockDTO.getCurrentPrice());
+        stock.setHighestPriceInLast5Min(stockDTO.getHighestPriceInLast5Min());
+        stock.setLowestPriceInLast5Min(stockDTO.getLowestPriceInLast5Min());
+        stock.setVolume(stockDTO.getVolume());
 
-        if (!stock.isPresent()) {
-            throw new ResourceNotFoundException(String.valueOf(stockId));
-        }
-
-        userStock = UserStock.builder().stock(stock.get()).user(user).build();
-
-        this.userStockRepository.save(userStock);
+        this.stockRepository.save(stock);
     }
 
     @Transactional
-    public void followUnFollowStock(String username, Long stockId, ProcessType processType) throws ResourceNotFoundException, DataIntegrityViolationException {
+    public void followUnFollowStock(String username, String stockname, ProcessType processType) throws ResourceNotFoundException, DataIntegrityViolationException {
 
         User user = userService.getUserByUserName(username);
-        Optional<Stock> stock = getStock(stockId);
+        Stock stock = this.stockRepository.findByStockName(stockname);
         UserStock userStock = null;
 
-        if (!stock.isPresent()) {
-            throw new ResourceNotFoundException(String.valueOf(stockId));
+        if (user == null || stock == null) {
+            throw new ResourceNotFoundException("Could not be found");
         }
 
         if (processType.equals(ProcessType.FOLLOW)) {
-            userStock = UserStock.builder().stock(stock.get()).user(user).activeIndicator(ActiveIndicator.ACTIVE.getValue()).build();
+            userStock = UserStock.builder().stock(stock).user(user).activeIndicator(ActiveIndicator.ACTIVE.getValue()).build();
         } else {
-            userStock = this.userStockRepository.findAllByUserUsernameAndStock_StockId(username, stockId);
+            userStock = this.userStockRepository.findAllByUserUsernameAndStock_StockId(username, stock.getStockId());
             userStock.setActiveIndicator(ActiveIndicator.INACTIVE.getValue());
         }
 
         this.userStockRepository.save(userStock);
     }
 
-    // TODO: 10/30/2020 - exception handling
+    public List<StockSearchDTO> searchStock(String stockName) throws IOException {
+
+        return this.dataStreamService.streamSearchStockAPI(stockName);
+    }
+
 }
