@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,15 +46,22 @@ public class StockService {
     }
 
     @Transactional
-    public void updateStock(StockDTO stockDTO) {
-        Stock stock = this.stockRepository.findByStockName(stockDTO.getStockName());
+    public void updateStock(List<StockDTO> stockDTO) {
 
-        stock.setCurrentPrice(stockDTO.getCurrentPrice());
-        stock.setHighestPriceInLast5Min(stockDTO.getHighestPriceInLast5Min());
-        stock.setLowestPriceInLast5Min(stockDTO.getLowestPriceInLast5Min());
-        stock.setVolume(stockDTO.getVolume());
+        List<Stock> stocksToBeSaved = new ArrayList<>();
 
-        this.stockRepository.save(stock);
+        stockDTO.forEach(x ->
+        {
+            Stock stock = this.stockRepository.findByStockName(x.getStockName());
+            stock.setCurrentPrice(x.getCurrentPrice());
+            stock.setHighestPriceInLast5Min(x.getHighestPriceInLast5Min());
+            stock.setLowestPriceInLast5Min(x.getLowestPriceInLast5Min());
+            stock.setVolume(x.getVolume());
+            stocksToBeSaved.add(stock);
+        });
+
+
+        this.stockRepository.saveAll(stocksToBeSaved);
     }
 
     @Transactional
